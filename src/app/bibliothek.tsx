@@ -8,7 +8,7 @@ import {
 } from 'react-native';
  
 import { Ionicons } from '@expo/vector-icons';
-import { NavBar } from './home';
+import { NAV_BAR_SPACE, NavBar } from './home';
  
 export default function Bibliothek() {
   return (
@@ -37,7 +37,7 @@ export default function Bibliothek() {
   
  
 {/* KARTEN */}
-<ScrollView>
+<ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
 <View style ={styles.tipp}>
   <Text style = {styles.cardTitel}>
     Tipp:
@@ -62,9 +62,7 @@ export default function Bibliothek() {
   </Text>
 </View>
 
-<View style ={{height: 125}}>
-</View>
-</ScrollView> 
+</ScrollView>
 
 <NavBar />
  </View> 
@@ -73,7 +71,16 @@ export default function Bibliothek() {
 
 
 const styles = StyleSheet.create({
- 
+
+  scroll: {
+    flex: 1,
+    marginBottom: NAV_BAR_SPACE,
+  },
+
+  scrollContent: {
+    paddingBottom: 20,
+  },
+
   headerRow: {
  
   flexDirection: 'row',

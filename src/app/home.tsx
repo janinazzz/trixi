@@ -3,7 +3,10 @@ import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const Greeting = () => { 
+// space the floating NavBar reserves at the bottom (45 offset + 50 height)
+export const NAV_BAR_SPACE = 110;
+
+const Greeting = () => {
      const { name } = useLocalSearchParams();
     return (
         <Text style={styles.greeting}>
