@@ -25,6 +25,40 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Running on Expo Go
+
+This project is pinned to **Expo SDK 54** on purpose so it runs on the Expo Go app
+that's currently in the App Store.
+
+1. Start the dev server, clearing the bundler cache:
+
+   ```bash
+   npx expo start -c
+   ```
+
+2. Install **Expo Go** from the App Store (iOS) / Play Store (Android).
+
+3. Scan the QR code from the terminal:
+   - **iOS:** scan with the built-in Camera app, then tap the banner.
+   - **Android:** open Expo Go → "Scan QR code".
+
+   Phone and computer must be on the same Wi-Fi. On locked-down networks, use a
+   tunnel instead: `npx expo start --tunnel`.
+
+### Why SDK 54 and not the newest SDK?
+
+Expo Go only supports one SDK version at a time. As of May 2026, the App Store
+Expo Go is **SDK 54** — the SDK 55 build is still waiting on Apple's review. Pinning
+to SDK 54 lets the app run on a physical iPhone via the stock Expo Go with no extra
+setup.
+
+**Important:** don't run `npm i <pkg>@latest` — it installs versions for the wrong
+SDK and breaks the dependency tree. Always use `npx expo install <pkg>`, then verify
+with `npx expo install --check`.
+
+> `expo-glass-effect` (liquid glass) won't render inside Expo Go; it needs a native
+> dev build. It degrades gracefully rather than crashing.
+
 ## Get a fresh project
 
 When you're ready, run:
