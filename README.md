@@ -1,90 +1,66 @@
-# Welcome to your Expo app 👋
+# Trixi
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Trixi is a small mobile app made with Expo and React Native. It shows tips
+("Tipp des Tages"), lets you search them by category and save the ones you like
+in your library. It's a student project, so it's still work in progress.
 
-## Get started
+## What it can do
 
-1. Install dependencies
+- Start screen where you type your name
+- Home with a greeting and the tip of the day
+- Search with categories (Rezepte, Events, Haushalt, Hobbies, Gesundheit)
+- Bibliothek (library) with saved tips and a filter
+- Profile with some settings (calendar sync, logout, ...)
 
-   ```bash
-   npm install
-   ```
+The bottom bar (search / home / library) is custom, the routing is done with
+expo-router (file-based, one file per screen in `src/app`).
 
-2. Start the app
+## How to run it
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Running on Expo Go
-
-This project is pinned to **Expo SDK 54** on purpose so it runs on the Expo Go app
-that's currently in the App Store.
-
-1. Start the dev server, clearing the bundler cache:
-
-   ```bash
-   npx expo start -c
-   ```
-
-2. Install **Expo Go** from the App Store (iOS) / Play Store (Android).
-
-3. Scan the QR code from the terminal:
-   - **iOS:** scan with the built-in Camera app, then tap the banner.
-   - **Android:** open Expo Go → "Scan QR code".
-
-   Phone and computer must be on the same Wi-Fi. On locked-down networks, use a
-   tunnel instead: `npx expo start --tunnel`.
-
-### Why SDK 54 and not the newest SDK?
-
-Expo Go only supports one SDK version at a time. As of May 2026, the App Store
-Expo Go is **SDK 54** — the SDK 55 build is still waiting on Apple's review. Pinning
-to SDK 54 lets the app run on a physical iPhone via the stock Expo Go with no extra
-setup.
-
-**Important:** don't run `npm i <pkg>@latest` — it installs versions for the wrong
-SDK and breaks the dependency tree. Always use `npx expo install <pkg>`, then verify
-with `npx expo install --check`.
-
-> `expo-glass-effect` (liquid glass) won't render inside Expo Go; it needs a native
-> dev build. It degrades gracefully rather than crashing.
-
-## Get a fresh project
-
-When you're ready, run:
+You need Node and the Expo Go app on your phone.
 
 ```bash
-npm run reset-project
+npm install
+npx expo start -c
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then scan the QR code from the terminal:
 
-### Other setup steps
+- iPhone: scan it with the normal Camera app
+- Android: open Expo Go and scan it there
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Your phone and your laptop have to be on the same Wi-Fi. If that doesn't work,
+try `npx expo start --tunnel`.
 
-## Learn more
+### About the Expo SDK version
 
-To learn more about developing your project with Expo, look at the following resources:
+We are on Expo SDK 54 on purpose. The Expo Go app in the App Store only supports
+one SDK at a time, and right now (May 2026) that's 54 — the SDK 55 version is
+still waiting to be approved by Apple. So 54 is the one that actually runs on a
+real iPhone without extra setup.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Because of that: don't install stuff with `npm i something@latest`, it pulls the
+version for the wrong SDK and breaks the project. Use `npx expo install something`
+instead and check with `npx expo install --check`.
 
-## Join the community
+(Small thing: `expo-glass-effect` doesn't render inside Expo Go, it needs a real
+dev build, but it doesn't crash the app.)
 
-Join our community of developers creating universal apps.
+## Folder structure
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+src/app/          the screens (file-based routing)
+  start.tsx       enter your name
+  home.tsx        home + the shared NavBar
+  search.tsx      search + categories
+  bibliothek.tsx  saved tips
+  profile.tsx     profile + settings
+  ...
+assets/images/    icons and images
+```
+
+## Built with
+
+- Expo SDK 54 / React Native
+- expo-router
+- TypeScript
