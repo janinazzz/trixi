@@ -1,18 +1,19 @@
 import React from 'react';
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
- 
+
 import { Ionicons } from '@expo/vector-icons';
 import { useLibrary } from '../context/LibraryContext';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 export default function Bibliothek() {
-  const { savedTips } = useLibrary();
+  const { savedTips, toggleTip } = useLibrary();
   return (
   <View style={{flex:1}}>
   
@@ -53,6 +54,9 @@ export default function Bibliothek() {
       <Text style={styles.cardText}>
         {tip.text}
       </Text>
+      <Pressable style={styles.heart} onPress={() => toggleTip(tip)}>
+        <Ionicons name="heart" size={30} color="black" />
+      </Pressable>
     </View>
   ))
 )}
@@ -138,6 +142,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 30,
     marginTop: 40,
+  },
+
+  heart: {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
   }
 
 });
