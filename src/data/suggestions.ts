@@ -111,8 +111,28 @@ const DEFAULT_SUGGESTIONS: Tip[] = [
 ];
 
 export function getSuggestions(keyword?: string): Tip[] {
-  if (keyword && CATEGORY_SUGGESTIONS[keyword]) {
-    return CATEGORY_SUGGESTIONS[keyword];
+  const query = keyword?.trim();
+  if (!query) {
+    return DEFAULT_SUGGESTIONS;
   }
-  return DEFAULT_SUGGESTIONS;
+
+  // Exact category tap (e.g. "Rezepte") returns that whole category.
+  const category = Object.keys(CATEGORY_SUGGESTIONS).find(
+    (name) => name.toLowerCase() === query.toLowerCase()
+  );
+  if (category) {
+    return CATEGORY_SUGGESTIONS[category];
+  }
+
+  // Free-text search: only match keywords that actually appear in the tip
+  // texts (title and body), not in the category name. Same card layout as a
+  // category result.
+  const needle = query.toLowerCase();
+  return Object.values(CATEGORY_SUGGESTIONS)
+    .flat()
+    .filter(
+      (tip) =>
+        tip.title.toLowerCase().includes(needle) ||
+        tip.text.toLowerCase().includes(needle)
+    );
 }

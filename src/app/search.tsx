@@ -4,20 +4,28 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { NavBar } from './home';
 
-const SearchBar = () => { 
+const SearchBar = () => {
     const router = useRouter();
     const [searchKeyword, setSearchKeyword] = useState('');
 
-    return ( 
+    const runSearch = () => {
+        const keyword = searchKeyword.trim();
+        if (!keyword) return;
+        router.push({ pathname: '/searchResult', params: { keyword } });
+    };
+
+    return (
         <View style ={styles.box}>
-            <TouchableOpacity onPress={() => router.push({ pathname: '/searchResult', params: { keyword: searchKeyword } })}>
+            <TouchableOpacity onPress={runSearch}>
                 <Ionicons name="search-outline" size={20} color='#868383' style={{paddingLeft: 15}} />
             </TouchableOpacity>
-            <TextInput 
-                style={{paddingLeft: 20, fontSize: 15, flex: 1}} 
-                placeholder="Suchen" 
+            <TextInput
+                style={{paddingLeft: 20, fontSize: 15, flex: 1}}
+                placeholder="Suchen"
                 value={searchKeyword}
                 onChangeText={setSearchKeyword}
+                onSubmitEditing={runSearch}
+                returnKeyType="search"
             />
         </View>
     );

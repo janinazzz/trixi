@@ -40,6 +40,11 @@ export default function searchResult() {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: NAV_BAR_SPACE }}>
+        {suggestions.length === 0 && (
+          <Text style={styles.emptyText}>
+            Keine Ergebnisse für "{heading}". Versuch es mit einem anderen Stichwort.
+          </Text>
+        )}
         {suggestions.map((tip) => {
           const liked = isSaved(tip.id);
           return (
@@ -106,5 +111,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     right: 15,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#868383',
+    textAlign: 'center',
+    marginHorizontal: 20,
+    marginTop: 40,
   },
 });
