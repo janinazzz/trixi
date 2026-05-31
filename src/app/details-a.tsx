@@ -1,83 +1,120 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+
+import { useLibrary } from '../context/LibraryContext';
+import { getTipById, getTipCategory } from '../data/suggestions';
+import { NavBar } from './home';
 
 export default function DetailsScreen() {
   // Hier holen wir uns die ID des geklickten Kasten ab
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { isSaved, toggleTip } = useLibrary();
+
+  const tip = getTipById(id);
+  const category = getTipCategory(id);
+  const liked = tip ? isSaved(tip.id) : false;
 
   return (
-    <View style= {{flex: 1}}>
-      
-      {/* 4. Der Zurück-Button Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          activeOpacity={0.7}
-          onPress={() => router.push('/')} // <--- Das bringt den User zurück zur index.tsx
-        >
-          <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
-          <Text style={styles.backText}>Zurück</Text>
-          <Ionicons name="heart" size={20} color="#f49191" />
-        </TouchableOpacity>
+    <View style={styles.screen}>
+      <View style={styles.tip}>
+        {/* Kopfzeile: "Tipp:" links, Schließen-X rechts */}
+        <View style={styles.topRow}>
+          <Text style={styles.tipLabel}>Tipp:</Text>
+          <Pressable onPress={() => router.back()} hitSlop={10}>
+            <Ionicons name="close" size={28} color="black" />
+          </Pressable>
+        </View>
+
+        {tip ? (
+          <ScrollView contentContainerStyle={styles.body}>
+            <Text style={styles.title}>{tip.title}</Text>
+            <Text style={styles.tipText}>{tip.text}</Text>
+          </ScrollView>
+        ) : (
+          <View style={styles.body}>
+            <Text style={styles.tipText}>Dieser Tipp wurde nicht gefunden.</Text>
+          </View>
+        )}
+
+        {/* Fußzeile: Kategorie-Pille links, Herz rechts */}
+        <View style={styles.bottomRow}>
+          {category ? (
+            <View style={styles.categoryPill}>
+              <Text style={styles.categoryText}>{category}</Text>
+            </View>
+          ) : (
+            <View />
+          )}
+          {tip && (
+            <Pressable onPress={() => toggleTip(tip)} hitSlop={10}>
+              <Ionicons name={liked ? 'heart' : 'heart-outline'} size={35} color="black" />
+            </Pressable>
+          )}
+        </View>
       </View>
 
-      {/* Inhalt der Detailseite */}
-      <View style={styles.content}>
-        <Text style={styles.title}>Suchergebnis Details</Text>
-        <Text style={styles.subtitle}>Du hast Kasten ID: {id} geöffnet</Text>
-        <Image 
-          source={{ uri: 'https://media1.tenor.com/m/JhPaTIbi-KwAAAAd/dol-huh.gif' }} 
-          style={styles.image}
-          resizeMode="cover" // Sorgt dafür, dass das Bild den Kasten sauber ausfüllt
-        />
-      </View>
-      
+      <NavBar />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    height: 50,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    marginTop: 10,
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  backText: {
-    fontSize: 16,
-    color: '#1a1a1a',
-    fontWeight: '500',
-  },
-  content: {
+  screen: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: 30, // Inhalt startet jetzt weiter oben
-    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
-  // 3. Styles für das Internet-Bild
-  image: {
-    width: '100%',      // Nimmt die volle verfügbare Breite des Containers
-    height: 300,        // Feste Höhe für das Bild
-    borderRadius: 24,   // Schöne abgerundete Ecken passend zum Rest deiner App
-    marginBottom: 24,   // Abstand zum Text darunter
-    backgroundColor: '#f0f0f0', // Ein leichter Grauton, falls das Bild mal lädt
+  tip: {
+    height: '70%',
+    width: '90%',
+    borderRadius: 20,
+    borderColor: '#868383',
+    borderWidth: 1,
+    alignSelf: 'center',
+    paddingVertical: 15,
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  tipLabel: {
+    fontSize: 20,
+  },
+  body: {
+    paddingHorizontal: 15,
+    paddingTop: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 14,
     color: '#1a1a1a',
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#666666',
+  tipText: {
+    fontSize: 18,
+    lineHeight: 26,
+    color: '#1a1a1a',
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingTop: 10,
+  },
+  categoryPill: {
+    borderWidth: 1,
+    borderColor: '#868383',
+    borderRadius: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 14,
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#868383',
   },
 });

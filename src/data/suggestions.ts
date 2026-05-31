@@ -1,4 +1,4 @@
-import { Tip } from '../context/LibraryContext';
+import { Tip, TIP_OF_THE_DAY } from '../context/LibraryContext';
 
 // Real "Vorschläge" per search category. Tone: informal (du), healthy,
 // modern and relevant for an audience aged ~18–30. IDs are stable so that
@@ -135,4 +135,29 @@ export function getSuggestions(keyword?: string): Tip[] {
         tip.title.toLowerCase().includes(needle) ||
         tip.text.toLowerCase().includes(needle)
     );
+}
+
+// Find which category a tip belongs to (undefined for default suggestions or
+// the tip of the day). Used for the category pill on the detail screen.
+export function getTipCategory(id?: string): string | undefined {
+  if (!id) {
+    return undefined;
+  }
+  return Object.keys(CATEGORY_SUGGESTIONS).find((name) =>
+    CATEGORY_SUGGESTIONS[name].some((tip) => tip.id === id)
+  );
+}
+
+// Look up a single tip by its stable id across all categories, the default
+// suggestions and the tip of the day. Used by the detail screen.
+export function getTipById(id?: string): Tip | undefined {
+  if (!id) {
+    return undefined;
+  }
+  const all = [
+    ...Object.values(CATEGORY_SUGGESTIONS).flat(),
+    ...DEFAULT_SUGGESTIONS,
+    TIP_OF_THE_DAY,
+  ];
+  return all.find((tip) => tip.id === id);
 }

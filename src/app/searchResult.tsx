@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,13 +9,12 @@ import {
   View
 } from 'react-native';
 
-import { useLibrary } from '../context/LibraryContext';
 import { getSuggestions } from '../data/suggestions';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 export default function searchResult() {
   const { keyword } = useLocalSearchParams<{ keyword?: string }>();
-  const { isSaved, toggleTip } = useLibrary();
+  const router = useRouter();
 
   const heading = keyword ?? 'Suche';
   const suggestions = getSuggestions(keyword);
@@ -39,24 +37,27 @@ export default function searchResult() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: NAV_BAR_SPACE }}>
+      <ScrollView contentContainerStyle={styles.grid}>
         {suggestions.length === 0 && (
           <Text style={styles.emptyText}>
             Keine Ergebnisse für "{heading}". Versuch es mit einem anderen Stichwort.
           </Text>
         )}
-        {suggestions.map((tip) => {
-          const liked = isSaved(tip.id);
-          return (
-            <View key={tip.id} style={styles.card}>
-              <Text style={styles.cardTitle}>{tip.title}</Text>
-              <Text style={styles.cardText}>{tip.text}</Text>
-              <Pressable style={styles.heart} onPress={() => toggleTip(tip)}>
-                <Ionicons name={liked ? 'heart' : 'heart-outline'} size={30} color="black" />
-              </Pressable>
-            </View>
-          );
-        })}
+        {suggestions.map((tip) => (
+          <TouchableOpacity
+            key={tip.id}
+            style={styles.card}
+            activeOpacity={0.8}
+            onPress={() => router.push({ pathname: '/details-a', params: { id: tip.id } })}
+          >
+            <Text style={styles.cardTitle} numberOfLines={2}>
+              {tip.title}
+            </Text>
+            <Text style={styles.cardPreview} numberOfLines={5}>
+              {tip.text}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
 
       <NavBar />
@@ -87,30 +88,31 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#000000',
   },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingBottom: NAV_BAR_SPACE,
+  },
   card: {
-    width: '90%',
-    alignSelf: 'center',
+    width: '48%',
+    aspectRatio: 1,
     borderWidth: 1,
     borderColor: '#868383',
     borderRadius: 20,
     padding: 15,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
   },
-  cardText: {
-    fontSize: 16,
-    color: 'black',
+  cardPreview: {
+    fontSize: 13,
+    color: '#444444',
     marginTop: 8,
-    marginBottom: 40,
-  },
-  heart: {
-    position: 'absolute',
-    bottom: 15,
-    right: 15,
   },
   emptyText: {
     fontSize: 16,
