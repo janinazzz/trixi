@@ -23,41 +23,24 @@ const SearchBar = () => {
     );
 };
 
-const Categories = () => { 
-    return ( 
-        <View style = {styles.grid}> 
-                <View style= {styles.category}>
-                    <Text style={styles.categoryText}> 
-                       Rezepte
+const CATEGORIES = ['Rezepte', 'Events', 'Haushalt', 'Hobbies', 'Gesundheit'];
+
+const Categories = () => {
+    const router = useRouter();
+    return (
+        <View style = {styles.grid}>
+            {CATEGORIES.map((category) => (
+                <TouchableOpacity
+                    key={category}
+                    style={styles.category}
+                    onPress={() => router.push({ pathname: '/searchResult', params: { keyword: category } })}
+                >
+                    <Text style={styles.categoryText}>
+                        {category}
                     </Text>
-                </View>
-
-                <View style= {styles.category}>
-                     <Text style={styles.categoryText}> 
-                       Events
-                    </Text>
-                </View> 
-
-                <View style= {styles.category}>
-                     <Text style={styles.categoryText}> 
-                       Haushalt
-                    </Text>
-                </View>
-
-                <View style= {styles.category}>
-                     <Text style={styles.categoryText}> 
-                       Hobbies
-                    </Text>
-                </View>
-
-                <View style= {styles.category}>
-                     <Text style={styles.categoryText}> 
-                       Gesundheit
-                    </Text>
-                </View>
-
-            </View>
-
+                </TouchableOpacity>
+            ))}
+        </View>
     );
 };
 

@@ -1,10 +1,11 @@
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useName } from '../context/NameContext';
 
 export default function Start() {
     const router = useRouter();
-    const [name, setName] = useState('');
+    const { name, setName } = useName();
     return (
         <View style={{ flex: 1}}> 
             <Text style={{fontSize: 45, fontWeight: 'bold', paddingHorizontal: 30, marginTop: 300, alignSelf: 'center'}}> 
@@ -20,7 +21,7 @@ export default function Start() {
 
             </View>
 
-            <TouchableOpacity style ={{alignSelf: 'center', marginTop: 20}} onPress={() => router.push({ pathname: '/home', params: { name } })}>
+            <TouchableOpacity style ={{alignSelf: 'center', marginTop: 20}} onPress={() => router.push('/home')}>
             <Text style={{fontSize: 20}}> 
                 Los geht's!
             </Text>

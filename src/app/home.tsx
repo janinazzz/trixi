@@ -1,13 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { usePathname, useRouter } from 'expo-router';
+import React from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { TIP_OF_THE_DAY, useLibrary } from '../context/LibraryContext';
+import { useName } from '../context/NameContext';
 
 // space the floating NavBar reserves at the bottom (45 offset + 50 height)
 export const NAV_BAR_SPACE = 110;
 
 const Greeting = () => {
-     const { name } = useLocalSearchParams();
+     const { name } = useName();
     return (
         <Text style={styles.greeting}>
             hey { name }!
@@ -44,14 +46,18 @@ export const NavBar = () => {
     );
 };
 
-const TipOfTheDay =() => { 
-    const [liked, setLiked] = useState(false);
-    return ( 
-        <View style={styles.tip}> 
+const TipOfTheDay =() => {
+    const { isSaved, toggleTip } = useLibrary();
+    const liked = isSaved(TIP_OF_THE_DAY.id);
+    return (
+        <View style={styles.tip}>
             <Text style={{fontSize: 15, fontWeight: 'regular', padding: 15}}>
                 Tipp des Tages:
             </Text>
-            <Pressable style={{alignSelf: 'flex-end', position: 'absolute', bottom: 15, marginRight: 15}} onPress={() => setLiked(!liked)}>
+            <Text style={styles.tipText}>
+                {TIP_OF_THE_DAY.text}
+            </Text>
+            <Pressable style={{alignSelf: 'flex-end', position: 'absolute', bottom: 15, marginRight: 15}} onPress={() => toggleTip(TIP_OF_THE_DAY)}>
             <Ionicons name={liked ? "heart" : "heart-outline"} size={35} color='black' />
             </Pressable>
         </View>
@@ -109,9 +115,13 @@ const styles = StyleSheet.create({
         width: '90%',
         borderRadius: 20,
         borderColor: '#868383',
-        borderWidth: 1, 
+        borderWidth: 1,
         alignSelf: 'center',
         marginTop: 20,
+    },
+    tipText: {
+        fontSize: 18,
+        paddingHorizontal: 15,
     }
 
 });

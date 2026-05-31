@@ -8,9 +8,11 @@ import {
 } from 'react-native';
  
 import { Ionicons } from '@expo/vector-icons';
+import { useLibrary } from '../context/LibraryContext';
 import { NAV_BAR_SPACE, NavBar } from './home';
- 
+
 export default function Bibliothek() {
+  const { savedTips } = useLibrary();
   return (
   <View style={{flex:1}}>
   
@@ -38,30 +40,22 @@ export default function Bibliothek() {
  
 {/* KARTEN */}
 <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-<View style ={styles.tipp}>
-  <Text style = {styles.cardTitel}>
-    Tipp:
+{savedTips.length === 0 ? (
+  <Text style={styles.empty}>
+    Noch keine Tipps gespeichert. Like den Tipp des Tages, um ihn hier zu sehen.
   </Text>
-</View>
- 
-<View style ={styles.tipp}>
-  <Text style = {styles.cardTitel}>
-    Tipp:
-  </Text>
-</View>
- 
-<View style ={styles.tipp}>
-  <Text style = {styles.cardTitel}>
-    Tipp:
-  </Text>
-</View>
- 
-<View style ={styles.tipp}>
-  <Text style = {styles.cardTitel}>
-    Tipp:
-  </Text>
-</View>
-
+) : (
+  savedTips.map((tip) => (
+    <View key={tip.id} style={styles.tipp}>
+      <Text style={styles.cardTitel}>
+        {tip.title}
+      </Text>
+      <Text style={styles.cardText}>
+        {tip.text}
+      </Text>
+    </View>
+  ))
+)}
 </ScrollView>
 
 <NavBar />
@@ -129,7 +123,22 @@ const styles = StyleSheet.create({
     color: 'black',
     padding: 15,
     justifyContent: 'flex-start',
+  },
+
+  cardText: {
+    fontSize: 18,
+    color: 'black',
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+  },
+
+  empty: {
+    fontSize: 16,
+    color: '#868383',
+    textAlign: 'center',
+    marginHorizontal: 30,
+    marginTop: 40,
   }
- 
+
 });
  
