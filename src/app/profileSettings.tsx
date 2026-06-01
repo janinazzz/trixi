@@ -184,9 +184,6 @@ export default function ProfileSettings() {
                     <TouchableOpacity onPress={reset}>
                         <Text style={styles.footerText}>Zurücksetzen</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.footerText}>Bearbeiten</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
 
