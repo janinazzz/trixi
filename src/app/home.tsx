@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { usePathname, useRouter } from 'expo-router';
-import React from 'react';
+import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import OnboardingModal from '../components/OnboardingModal';
 import { TIP_OF_THE_DAY, useLibrary } from '../context/LibraryContext';
 import { useName } from '../context/NameContext';
 
@@ -68,18 +69,25 @@ const TipOfTheDay =() => {
 
 export default function Home() {
      const router = useRouter();
+    // Beim ersten Öffnen nach der Anmeldung das Onboarding-Pop-up zeigen.
+    const { onboarding } = useLocalSearchParams<{ onboarding?: string }>();
+    const [showOnboarding, setShowOnboarding] = useState(onboarding === '1');
     return (
-        <> 
+        <>
         <View style={{ flex: 1}}>
-            <TouchableOpacity onPress={() => router.push('/profile')}>
-            <Ionicons name="person-circle-outline" size={60} color = "black" style={styles.profilePic} />
+            <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/profileSettings')}>
+                <Ionicons name="person-circle-outline" size={80} color="black" />
+                <View style={styles.editBadge}>
+                    <Ionicons name="pencil-outline" size={18} color="black" />
+                </View>
             </TouchableOpacity>
-            <Greeting /> 
+            <Greeting />
             <TipOfTheDay />
             <NavBar />
+            <OnboardingModal visible={showOnboarding} onClose={() => setShowOnboarding(false)} />
         </View>
         </>
-    
+
     );
 }
 
@@ -105,10 +113,24 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#ffffff',
     },
-    profilePic: { 
+    profileButton: {
         alignSelf: 'flex-end',
         marginTop: 70,
-        marginRight: 30,
+        marginRight: 20,
+    
+    },
+    editBadge: {
+        position: 'absolute',
+        bottom: 2,
+        right: 2,
+        width: 26,
+        height: 26,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        borderColor: '#ffffff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     tip: {
         height: '55%',

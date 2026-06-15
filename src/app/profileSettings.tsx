@@ -3,13 +3,8 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useName } from '../context/NameContext';
+import { GENDERS, useProfile } from '../context/ProfileContext';
 import { NAV_BAR_SPACE, NavBar } from './home';
-
-const GENDERS = ['m', 'w', 'd'] as const;
-type Gender = (typeof GENDERS)[number];
-
-const DEFAULT_INTERESSEN = ['Kochen'];
-const DEFAULT_ZIELE = ['Sparen'];
 
 const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: string) => void }) => {
     const router = useRouter();
@@ -24,7 +19,7 @@ const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: st
                 onChangeText={onChangeName}
             />
             <TouchableOpacity onPress={() => router.push('/profile')}>
-                <Ionicons name="close-outline" size={30} color="black" />
+                <Ionicons name="settings-outline" size={30} color="black" />
             </TouchableOpacity>
         </View>
     );
@@ -76,21 +71,25 @@ const ChipList = ({
 
 export default function ProfileSettings() {
     const { name, setName } = useName();
-    const [birthday, setBirthday] = useState('');
-    const [gender, setGender] = useState<Gender | null>(null);
-    const [plz, setPlz] = useState('');
-    const [stadt, setStadt] = useState('');
-    const [interessen, setInteressen] = useState(DEFAULT_INTERESSEN);
-    const [ziele, setZiele] = useState(DEFAULT_ZIELE);
+    const {
+        birthday,
+        setBirthday,
+        gender,
+        setGender,
+        plz,
+        setPlz,
+        stadt,
+        setStadt,
+        interessen,
+        setInteressen,
+        ziele,
+        setZiele,
+        reset: resetProfile,
+    } = useProfile();
 
     const reset = () => {
         setName('');
-        setBirthday('');
-        setGender(null);
-        setPlz('');
-        setStadt('');
-        setInteressen(DEFAULT_INTERESSEN);
-        setZiele(DEFAULT_ZIELE);
+        resetProfile();
     };
 
     return (

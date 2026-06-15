@@ -13,7 +13,7 @@ const Header = () => {
                 <Ionicons name="person-circle-outline" size={70} color = "black" />
                 <Text style={styles.nameText}>{name || 'Name'}</Text>
                 <TouchableOpacity style={{flex:1, alignItems: 'flex-end'}} onPress={() => router.push('/profileSettings')}>
-                    <Ionicons name="settings-outline" size={30} color="black" />
+                    <Ionicons name="close-outline" size={30} color="black" />
                 </TouchableOpacity>
             </View>
     );
