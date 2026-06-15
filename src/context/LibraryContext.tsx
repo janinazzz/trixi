@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { Vibration } from 'react-native';
 
 export type Tip = {
     id: string;
@@ -26,12 +27,18 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
 
     const isSaved = (id: string) => savedTips.some((tip) => tip.id === id);
 
-    const toggleTip = (tip: Tip) =>
+    const toggleTip = (tip: Tip) => {
+        const alreadySaved = savedTips.some((saved) => saved.id === tip.id);
+        // Kurze Vibration nur beim Favorisieren (Hinzufügen), nicht beim Entfernen.
+        if (!alreadySaved) {
+            Vibration.vibrate(50);
+        }
         setSavedTips((prev) =>
             prev.some((saved) => saved.id === tip.id)
                 ? prev.filter((saved) => saved.id !== tip.id)
                 : [...prev, tip]
         );
+    };
 
     return (
         <LibraryContext.Provider value={{ savedTips, isSaved, toggleTip }}>

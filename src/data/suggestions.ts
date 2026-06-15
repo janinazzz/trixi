@@ -148,6 +148,24 @@ export function getTipCategory(id?: string): string | undefined {
   );
 }
 
+// Sort/filter options offered by the filter button on the Bibliothek and
+// search result screens.
+export type SortOption = 'neuste' | 'aelteste' | 'kategorie';
+
+// Sort a list of tips. The incoming order is treated as oldest-first, so
+// "neuste" reverses it and "aelteste" keeps it; "kategorie" groups by category.
+export function sortTips(tips: Tip[], sort: SortOption): Tip[] {
+  if (sort === 'neuste') {
+    return [...tips].reverse();
+  }
+  if (sort === 'kategorie') {
+    return [...tips].sort((a, b) =>
+      (getTipCategory(a.id) ?? '').localeCompare(getTipCategory(b.id) ?? '')
+    );
+  }
+  return tips;
+}
+
 // Look up a single tip by its stable id across all categories, the default
 // suggestions and the tip of the day. Used by the detail screen.
 export function getTipById(id?: string): Tip | undefined {

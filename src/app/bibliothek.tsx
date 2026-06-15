@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -9,11 +9,16 @@ import {
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
+import FilterMenu from '../components/FilterMenu';
 import { useLibrary } from '../context/LibraryContext';
+import { getTipCategory, SortOption, sortTips } from '../data/suggestions';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 export default function Bibliothek() {
   const { savedTips, toggleTip } = useLibrary();
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [sort, setSort] = useState<SortOption>('neuste');
+  const tips = sortTips(savedTips, sort);
   return (
   <View style={{flex:1}}>
   
@@ -29,7 +34,7 @@ export default function Bibliothek() {
     </View>
  
   {/* FILTER */}
-  <TouchableOpacity>
+  <TouchableOpacity onPress={() => setFilterVisible(true)}>
     <View style ={styles.smallIcons}>
     <Text>
       Filter
@@ -46,7 +51,9 @@ export default function Bibliothek() {
     Noch keine Tipps gespeichert. Like den Tipp des Tages, um ihn hier zu sehen.
   </Text>
 ) : (
-  savedTips.map((tip) => (
+  tips.map((tip) => {
+    const category = getTipCategory(tip.id);
+    return (
     <View key={tip.id} style={styles.tipp}>
       <Text style={styles.cardTitel}>
         {tip.title}
@@ -54,16 +61,29 @@ export default function Bibliothek() {
       <Text style={styles.cardText}>
         {tip.text}
       </Text>
+      {category && (
+        <View style={styles.categoryPill}>
+          <Text style={styles.categoryText}>{category}</Text>
+        </View>
+      )}
       <Pressable style={styles.heart} onPress={() => toggleTip(tip)}>
         <Ionicons name="heart" size={30} color="black" />
       </Pressable>
     </View>
-  ))
+    );
+  })
 )}
 </ScrollView>
 
+<FilterMenu
+  visible={filterVisible}
+  current={sort}
+  onSelect={setSort}
+  onClose={() => setFilterVisible(false)}
+/>
+
 <NavBar />
- </View> 
+ </View>
 );
 };
 
@@ -148,6 +168,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     right: 15,
+  },
+
+  categoryPill: {
+    position: 'absolute',
+    bottom: 15,
+    left: 15,
+    borderWidth: 1,
+    borderColor: '#868383',
+    borderRadius: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 14,
+  },
+
+  categoryText: {
+    fontSize: 14,
+    color: '#868383',
   }
 
 });

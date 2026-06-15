@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -9,15 +9,24 @@ import {
   View
 } from 'react-native';
 
-import { getSuggestions } from '../data/suggestions';
+import FilterMenu from '../components/FilterMenu';
+import { getSuggestions, SortOption, sortTips } from '../data/suggestions';
 import { NAV_BAR_SPACE, NavBar } from './home';
+
+const SORT_LABELS: Record<SortOption, string> = {
+  neuste: 'Neuste',
+  aelteste: 'Älteste',
+  kategorie: 'Kategorie',
+};
 
 export default function searchResult() {
   const { keyword } = useLocalSearchParams<{ keyword?: string }>();
   const router = useRouter();
 
   const heading = keyword ?? 'Suche';
-  const suggestions = getSuggestions(keyword);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [sort, setSort] = useState<SortOption>('neuste');
+  const suggestions = sortTips(getSuggestions(keyword), sort);
 
   return (
     <View style={{ flex: 1 }}>
@@ -26,13 +35,19 @@ export default function searchResult() {
       </View>
 
       <View style={styles.actionRow}>
-        <TouchableOpacity style={{ flexDirection: 'row', gap: 7 }}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', gap: 7 }}
+          onPress={() => setFilterVisible(true)}
+        >
           <Text style={styles.actionText}>Filter</Text>
           <Ionicons name="options-outline" size={20} color="#000000" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ flexDirection: 'row', gap: 7 }}>
-          <Text style={styles.actionText}>Neueste</Text>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', gap: 7 }}
+          onPress={() => setFilterVisible(true)}
+        >
+          <Text style={styles.actionText}>{SORT_LABELS[sort]}</Text>
           <Ionicons name="swap-vertical-outline" size={20} color="#000000" />
         </TouchableOpacity>
       </View>
@@ -59,6 +74,13 @@ export default function searchResult() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      <FilterMenu
+        visible={filterVisible}
+        current={sort}
+        onSelect={setSort}
+        onClose={() => setFilterVisible(false)}
+      />
 
       <NavBar />
     </View>
