@@ -1,16 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, Pressable, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useName } from '../context/NameContext';
+import { useProfile } from '../context/ProfileContext';
 import { NavBar } from './home';
 
 const Header = () => {
     const router = useRouter();
     const { name } = useName();
+    const { avatarUri } = useProfile();
     return (
         <View style ={{flexDirection: 'row', gap: 20, alignItems: 'center', marginHorizontal: 30, marginTop: 70}}>
-                <Ionicons name="person-circle-outline" size={70} color = "black" />
+                {avatarUri ? (
+                    <Image source={{ uri: avatarUri }} style={styles.avatar} />
+                ) : (
+                    <Ionicons name="person-circle-outline" size={70} color = "black" />
+                )}
                 <Text style={styles.nameText}>{name || 'Name'}</Text>
                 <TouchableOpacity style={{flex:1, alignItems: 'flex-end'}} onPress={() => router.push('/profileSettings')}>
                     <Ionicons name="close-outline" size={30} color="black" />
@@ -91,6 +97,12 @@ const styles = StyleSheet.create({
         color : '#000000',
         fontWeight : 'bold',
         fontSize: 30,
+    },
+    avatar: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: '#f0f0f0',
     },
     info: {
         flexDirection: 'column',

@@ -1,16 +1,40 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useName } from '../context/NameContext';
 import { GENDERS, useProfile } from '../context/ProfileContext';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: string) => void }) => {
     const router = useRouter();
+    const { avatarUri, setAvatarUri } = useProfile();
+
+    const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setAvatarUri(result.assets[0].uri);
+        }
+    };
+
     return (
         <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center', marginHorizontal: 30, marginTop: 70 }}>
-            <Ionicons name="person-circle-outline" size={70} color="black" />
+            <TouchableOpacity onPress={pickImage} activeOpacity={0.8}>
+                {avatarUri ? (
+                    <Image source={{ uri: avatarUri }} style={styles.avatar} />
+                ) : (
+                    <Ionicons name="person-circle-outline" size={70} color="black" />
+                )}
+                <View style={styles.avatarBadge}>
+                    <Ionicons name="camera-outline" size={14} color="black" />
+                </View>
+            </TouchableOpacity>
             <TextInput
                 style={[styles.nameText, { flex: 1 }]}
                 placeholder="</name>"
@@ -196,6 +220,25 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: 'bold',
         fontSize: 30,
+    },
+    avatar: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: '#f0f0f0',
+    },
+    avatarBadge: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        width: 24,
+        height: 24,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        borderColor: '#868383',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     section: {
         marginHorizontal: 30,

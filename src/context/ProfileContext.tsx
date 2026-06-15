@@ -7,6 +7,8 @@ const DEFAULT_INTERESSEN = ['Kochen'];
 const DEFAULT_ZIELE = ['Sparen'];
 
 type ProfileContextValue = {
+    avatarUri: string | null;
+    setAvatarUri: (value: string | null) => void;
     birthday: string;
     setBirthday: (value: string) => void;
     gender: Gender | null;
@@ -26,6 +28,7 @@ const ProfileContext = createContext<ProfileContextValue | undefined>(undefined)
 
 // Shared profile data so onboarding and profile settings stay in sync.
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
+    const [avatarUri, setAvatarUri] = useState<string | null>(null);
     const [birthday, setBirthday] = useState('');
     const [gender, setGender] = useState<Gender | null>(null);
     const [plz, setPlz] = useState('');
@@ -34,6 +37,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     const [ziele, setZiele] = useState<string[]>(DEFAULT_ZIELE);
 
     const reset = () => {
+        setAvatarUri(null);
         setBirthday('');
         setGender(null);
         setPlz('');
@@ -45,6 +49,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     return (
         <ProfileContext.Provider
             value={{
+                avatarUri,
+                setAvatarUri,
                 birthday,
                 setBirthday,
                 gender,

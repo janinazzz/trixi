@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import OnboardingModal from '../components/OnboardingModal';
 import { TIP_OF_THE_DAY, useLibrary } from '../context/LibraryContext';
 import { useName } from '../context/NameContext';
+import { useProfile } from '../context/ProfileContext';
 
 // space the floating NavBar reserves at the bottom (45 offset + 50 height)
 export const NAV_BAR_SPACE = 110;
@@ -69,6 +70,7 @@ const TipOfTheDay =() => {
 
 export default function Home() {
      const router = useRouter();
+    const { avatarUri } = useProfile();
     // Beim ersten Öffnen nach der Anmeldung das Onboarding-Pop-up zeigen.
     const { onboarding } = useLocalSearchParams<{ onboarding?: string }>();
     const [showOnboarding, setShowOnboarding] = useState(onboarding === '1');
@@ -76,7 +78,11 @@ export default function Home() {
         <>
         <View style={{ flex: 1}}>
             <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/profileSettings')}>
-                <Ionicons name="person-circle-outline" size={80} color="black" />
+                {avatarUri ? (
+                    <Image source={{ uri: avatarUri }} style={styles.profilePic} />
+                ) : (
+                    <Ionicons name="person-circle-outline" size={80} color="black" />
+                )}
                 <View style={styles.editBadge}>
                     <Ionicons name="pencil-outline" size={18} color="black" />
                 </View>
@@ -117,7 +123,13 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginTop: 70,
         marginRight: 20,
-    
+
+    },
+    profilePic: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: '#f0f0f0',
     },
     editBadge: {
         position: 'absolute',
@@ -128,7 +140,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#ffffff',
         borderWidth: 1,
-        borderColor: '#ffffff',
+        borderColor: '#868383',
         alignItems: 'center',
         justifyContent: 'center',
     },

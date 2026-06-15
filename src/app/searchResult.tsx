@@ -13,12 +13,6 @@ import FilterMenu from '../components/FilterMenu';
 import { getSuggestions, SortOption, sortTips } from '../data/suggestions';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
-const SORT_LABELS: Record<SortOption, string> = {
-  neuste: 'Neuste',
-  aelteste: 'Älteste',
-  kategorie: 'Kategorie',
-};
-
 export default function searchResult() {
   const { keyword } = useLocalSearchParams<{ keyword?: string }>();
   const router = useRouter();
@@ -41,14 +35,6 @@ export default function searchResult() {
         >
           <Text style={styles.actionText}>Filter</Text>
           <Ionicons name="options-outline" size={20} color="#000000" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ flexDirection: 'row', gap: 7 }}
-          onPress={() => setFilterVisible(true)}
-        >
-          <Text style={styles.actionText}>{SORT_LABELS[sort]}</Text>
-          <Ionicons name="swap-vertical-outline" size={20} color="#000000" />
         </TouchableOpacity>
       </View>
 
