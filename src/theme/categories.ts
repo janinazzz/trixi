@@ -1,23 +1,36 @@
 import { Colors } from "./colors";
 
 /**
- * Feste Farbe pro Such-Kategorie (Farben aus der Referenz-Palette).
+ * Feste Füllfarbe pro Such-Kategorie (Farben aus der Referenz-Palette).
  *
- * `bg` = Füllfarbe der Kachel/Karte, `fg` = lesbarer Text-/Icon-Ton darauf.
- * Wird auf dem Such-Screen (Kategorie-Kacheln) und in der Bibliothek
- * (gespeicherte Tipps in ihrer Kategorie-Farbe) verwendet.
+ * Der lesbare Vordergrund (`fg`) wird NICHT fest hinterlegt, sondern aus der
+ * Helligkeit der Füllfarbe berechnet: dunkler Text auf hellen Flächen, weißer
+ * Text auf dunklen. So bleibt der Text lesbar, egal wie die `bg` angepasst wird.
+ *
+ * Verwendet auf Such-Screen, Bibliothek, Detail und beim Tipp des Tages.
  */
-export type CategoryColor = { bg: string; fg: string };
-
-export const CATEGORY_COLORS: Record<string, CategoryColor> = {
-  Rezepte: { bg: "#EF6F3C", fg: "#FFFFFF" }, // Blood Orange
-  Events: { bg: "#FF7BAC", fg: "#FFFFFF" }, // Bubblegum
-  Haushalt: { bg: "#52A5CE", fg: "#FFFFFF" }, // Blueberry
-  Hobbies: { bg: "#EFCE7B", fg: "#FFFFFF" }, // Butter Yellow
-  Gesundheit: { bg: "#AACC96", fg: "#FFFFFF" }, // Tea Green
+const CATEGORY_BG: Record<string, string> = {
+  Rezepte: "#ffa885", // Blood Orange
+  Events: "#fcb1cd", // Bubblegum
+  Haushalt: "#90d9fd", // Blueberry
+  Hobbies: "#fedb82", // Butter Yellow
+  Gesundheit: "#b7dca1", // Tea Green
 };
 
-/** Neutrale Fläche für Tipps ohne Kategorie (z. B. Tipp des Tages). */
+export type CategoryColor = { bg: string; fg: string };
+
+/** Lesbarer Text-/Icon-Ton auf `bg` – dunkel auf hell, weiß auf dunkel. */
+function readableFg(bg: string): string {
+  const hex = bg.replace("#", "");
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  // wahrgenommene Helligkeit (YIQ-Gewichtung), 0–255
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 150 ? Colors.text : "#FFFFFF";
+}
+
+/** Neutrale Fläche für Tipps ohne Kategorie (z. B. unbekannte Kategorie). */
 export const CATEGORY_FALLBACK: CategoryColor = {
   bg: Colors.surface,
   fg: Colors.text,
@@ -26,5 +39,7 @@ export const CATEGORY_FALLBACK: CategoryColor = {
 /** Farbe für eine Kategorie (Fallback, wenn keine/unbekannte Kategorie). */
 export function getCategoryColor(category?: string): CategoryColor {
   if (!category) return CATEGORY_FALLBACK;
-  return CATEGORY_COLORS[category] ?? CATEGORY_FALLBACK;
+  const bg = CATEGORY_BG[category];
+  if (!bg) return CATEGORY_FALLBACK;
+  return { bg, fg: readableFg(bg) };
 }

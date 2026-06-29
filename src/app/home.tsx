@@ -10,6 +10,7 @@ import { useProfile } from '../context/ProfileContext';
 import { getTipCategory } from '../data/suggestions';
 import { getCategoryColor } from '../theme/categories';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 
 // space the floating NavBar reserves at the bottom (45 offset + 50 height)
@@ -19,7 +20,8 @@ const Greeting = () => {
      const { name } = useName();
     return (
         <Text style={styles.greeting}>
-            hey{'\n'}{ name }!
+            hey{'\n'}
+            <Text style={styles.greetingName}>{ name }!</Text>
             </Text>
     );
 };
@@ -63,7 +65,7 @@ const TipOfTheDay =() => {
             {/* Maskottchen lugt oben rechts über den Rand der Karte */}
             <Mascot size={100} style={styles.tipMascot} />
             <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
-                <Text style={{fontSize: 15, fontWeight: 'regular', padding: 15, color: c.fg}}>
+                <Text style={{fontSize: 15, fontFamily: Fonts.bodyLight, padding: 15, color: c.fg}}>
                     Tipp des Tages:
                 </Text>
                 <Text style={[styles.tipText, { color: c.fg }]}>
@@ -112,13 +114,17 @@ export default function Home() {
 const styles = StyleSheet.create({
     greeting: {
         fontSize:45,
-        fontWeight: 'bold',
+        lineHeight: 51,
+        fontFamily: Fonts.display,
         color: Colors.text,
         paddingLeft: 30,
         // rechts Platz freihalten, damit ein langer Name umbricht und das
         // Maskottchen nicht verdeckt
         paddingRight: 150,
-        marginTop: 8,
+        marginTop: 0,
+    },
+    greetingName: {
+        fontFamily: Fonts.displayItalic,
     },
     navBar: {
         ...Shadows.card,
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
         height: '55%',
         width: '90%',
         alignSelf: 'center',
-        marginTop: 10,
+        marginTop: 14,
     },
     tipMascot: {
         position: 'absolute',

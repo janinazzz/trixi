@@ -23,7 +23,7 @@ export const Colors = {
   background: "#f9f7e5",
   /** Weiche, neutrale Fläche für Cards / abgesetzte Bereiche. */
   surface: "#F4F4F8",
-  text: "#1E1E28",
+  text: "#000000",
   /** Sekundärtext, Platzhalter, Icons. */
   textMuted: "#8E8F99",
   /** Kräftigere Hairline-Border für klare Abgrenzungen. */

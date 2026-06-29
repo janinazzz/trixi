@@ -13,6 +13,7 @@ import {
 import Mascot from '../components/Mascot';
 import { useName } from '../context/NameContext';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 
 export default function Start() {
@@ -70,10 +71,10 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 45,
-        fontWeight: 'bold',
+        fontFamily: Fonts.display,
         paddingHorizontal: 30,
         alignSelf: 'center',
-        color: Colors.accent,
+        color: Colors.text,
     },
     cta: {
         ...Shadows.button,

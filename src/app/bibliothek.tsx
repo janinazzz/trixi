@@ -14,6 +14,7 @@ import { useLibrary } from '../context/LibraryContext';
 import { getTipCategory, SortOption, sortTips } from '../data/suggestions';
 import { getCategoryColor } from '../theme/categories';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
@@ -127,8 +128,8 @@ const styles = StyleSheet.create({
  
  
   header: {
-    color : Colors.accent,
-    fontWeight : 'bold',
+    color : Colors.text,
+    fontFamily: Fonts.display,
     fontSize: 30,
   },
  

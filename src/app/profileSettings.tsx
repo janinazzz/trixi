@@ -6,6 +6,7 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import { useName } from '../context/NameContext';
 import { GENDERS, useProfile } from '../context/ProfileContext';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: string) => void }) => {
@@ -219,7 +220,7 @@ export default function ProfileSettings() {
 const styles = StyleSheet.create({
     nameText: {
         color: Colors.text,
-        fontWeight: 'bold',
+        fontFamily: Fonts.displayItalic,
         fontSize: 30,
     },
     avatar: {

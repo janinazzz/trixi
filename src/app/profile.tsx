@@ -5,6 +5,7 @@ import { Image, Modal, Pressable, StyleSheet, Switch, Text, TouchableOpacity, Vi
 import { useName } from '../context/NameContext';
 import { useProfile } from '../context/ProfileContext';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 import { NavBar } from './home';
 
@@ -61,12 +62,13 @@ export default function Profile() {
                 </TouchableOpacity>
             </View>
 
-                <TouchableOpacity style = {styles.buttonContainer} onPress={() => setConfirmVisible(true)}>
-                    <Text style={{fontSize: 20, padding: 10}}>
-                        Abmelden
-                    </Text>
-                    <Ionicons name="log-out-outline" size={30} color={Colors.text} />
-                </TouchableOpacity>
+                <Pressable
+                    style={({ pressed }) => [styles.buttonContainer, pressed && { backgroundColor: Colors.accentStrong }]}
+                    onPress={() => setConfirmVisible(true)}
+                >
+                    <Text style={styles.buttonText}>Abmelden</Text>
+                    <Ionicons name="log-out-outline" size={24} color={Colors.onAccent} />
+                </Pressable>
 
             <Modal
                 visible={confirmVisible}
@@ -100,7 +102,7 @@ export default function Profile() {
 const styles = StyleSheet.create({ 
     nameText: {
         color : Colors.text,
-        fontWeight : 'bold',
+        fontFamily: Fonts.displayItalic,
         fontSize: 30,
     },
     avatar: {
@@ -120,17 +122,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     buttonContainer: {
-        ...Shadows.soft,
-        backgroundColor: Colors.white,
+        ...Shadows.button,
         marginTop: 30,
-        paddingHorizontal: 5,
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'space-around',
         flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: Colors.navBarBorder,
-        borderRadius: 20,
+        gap: 8,
+        backgroundColor: Colors.accent,
+        paddingHorizontal: 36,
+        paddingVertical: 12,
+        borderRadius: 24,
+    },
+    buttonText: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: Colors.onAccent,
     },
     backdrop: {
         flex: 1,

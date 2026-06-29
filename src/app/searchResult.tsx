@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 
 import FilterMenu from '../components/FilterMenu';
-import { getSuggestions, SortOption, sortTips } from '../data/suggestions';
-import { CATEGORY_COLORS } from '../theme/categories';
+import { getSuggestions, getTipCategory, SortOption, sortTips } from '../data/suggestions';
+import { getCategoryColor } from '../theme/categories';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
@@ -25,15 +26,10 @@ export default function searchResult() {
   const [sort, setSort] = useState<SortOption>('neuste');
   const suggestions = sortTips(getSuggestions(keyword), sort);
 
-  // Bei einem Kategorie-Stichwort den Screen-Hintergrund in der Kategorie-Farbe
-  // einfärben; Kopf-Texte nehmen den passenden Kontrastton.
-  const categoryColor = keyword ? CATEGORY_COLORS[keyword] : undefined;
-  const headFg = categoryColor ? categoryColor.fg : undefined;
-
   return (
-    <View style={[{ flex: 1 }, categoryColor && { backgroundColor: categoryColor.bg }]}>
+    <View style={{ flex: 1 }}>
       <View style={styles.resultHeader}>
-        <Text style={[styles.resultText, headFg && { color: headFg }]}> Ergebnisse für "{heading}"</Text>
+        <Text style={styles.resultText}> Ergebnisse für "{heading}"</Text>
       </View>
 
       <View style={styles.actionRow}>
@@ -41,8 +37,8 @@ export default function searchResult() {
           style={{ flexDirection: 'row', gap: 7 }}
           onPress={() => setFilterVisible(true)}
         >
-          <Text style={[styles.actionText, headFg && { color: headFg }]}>Filter</Text>
-          <Ionicons name="options-outline" size={20} color={headFg ?? Colors.text} />
+          <Text style={styles.actionText}>Filter</Text>
+          <Ionicons name="options-outline" size={20} color={Colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -52,21 +48,25 @@ export default function searchResult() {
             Keine Ergebnisse für "{heading}". Versuch es mit einem anderen Stichwort.
           </Text>
         )}
-        {suggestions.map((tip) => (
+        {suggestions.map((tip) => {
+          // Tipp komplett in der Farbe seiner Kategorie.
+          const cc = getCategoryColor(getTipCategory(tip.id));
+          return (
           <TouchableOpacity
             key={tip.id}
-            style={styles.card}
+            style={[styles.card, { backgroundColor: cc.bg, borderColor: cc.bg }]}
             activeOpacity={0.8}
             onPress={() => router.push({ pathname: '/details-a', params: { id: tip.id } })}
           >
-            <Text style={styles.cardTitle} numberOfLines={2}>
+            <Text style={[styles.cardTitle, { color: cc.fg }]} numberOfLines={2}>
               {tip.title}
             </Text>
-            <Text style={styles.cardPreview} numberOfLines={5}>
+            <Text style={[styles.cardPreview, { color: cc.fg }]} numberOfLines={5}>
               {tip.text}
             </Text>
           </TouchableOpacity>
-        ))}
+          );
+        })}
       </ScrollView>
 
       <FilterMenu
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   resultText: {
-    color: Colors.accent,
-    fontWeight: 'bold',
+    color: Colors.text,
+    fontFamily: Fonts.display,
     fontSize: 30,
   },
   actionRow: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     width: '48%',
     aspectRatio: 1,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: Colors.borderSoft,
     borderRadius: 20,
     padding: 15,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: Fonts.display,
     color: Colors.text,
   },
   cardPreview: {

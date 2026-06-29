@@ -28,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#FFFFFF",
+          "backgroundColor": "#f9f7e5",
           "image": "./assets/images/mascot-splash.png",
           "imageWidth": 200,
           "android": {
@@ -36,7 +36,8 @@
             "imageWidth": 200
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

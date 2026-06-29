@@ -3,10 +3,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import Mascot from '../components/Mascot';
 import { useLibrary } from '../context/LibraryContext';
 import { getTipById, getTipCategory } from '../data/suggestions';
 import { getCategoryColor } from '../theme/categories';
 import { Colors } from '../theme/colors';
+import { Fonts } from '../theme/fonts';
 import { Shadows } from '../theme/shadows';
 import { NavBar } from './home';
 
@@ -24,7 +26,10 @@ export default function DetailsScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
+      <View style={styles.tipWrapper}>
+        {/* Maskottchen lugt oben rechts über den Rand der Karte */}
+        <Mascot size={65} style={styles.tipMascot} />
+        <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
         {/* Kopfzeile: "Tipp:" links, Schließen-X rechts */}
         <View style={styles.topRow}>
           <Text style={[styles.tipLabel, { color: c.fg }]}>Tipp:</Text>
@@ -59,6 +64,7 @@ export default function DetailsScreen() {
             </Pressable>
           )}
         </View>
+        </View>
       </View>
 
       <NavBar />
@@ -71,15 +77,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  tip: {
-    ...Shadows.card,
-    backgroundColor: Colors.white,
+  tipWrapper: {
     height: '70%',
     width: '90%',
+    alignSelf: 'center',
+  },
+  tipMascot: {
+    position: 'absolute',
+    right: 24,
+    // negativer top-Wert: das Maskottchen ragt über die Kartenoberkante,
+    // sein unterer Rand wird von der gefüllten Karte verdeckt (die Karte wird
+    // nach dem Maskottchen gerendert und übermalt es)
+    top: -54,
+  },
+  tip: {
+    ...Shadows.card,
+    flex: 1,
     borderRadius: 20,
     borderColor: Colors.borderSoft,
     borderWidth: 1,
-    alignSelf: 'center',
     paddingVertical: 15,
   },
   topRow: {
@@ -97,7 +113,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontFamily: Fonts.display,
     marginBottom: 14,
     color: Colors.text,
   },
