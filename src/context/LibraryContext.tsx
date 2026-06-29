@@ -5,6 +5,9 @@ export type Tip = {
     id: string;
     title: string;
     text: string;
+    /** Optionale Kategorie (z. B. für den Tipp des Tages, der nicht in den
+     *  Such-Vorschlägen steht). Bestimmt u. a. seine Farbe. */
+    category?: string;
 };
 
 // Example "Tipp des Tages" shown on the home screen.
@@ -12,6 +15,7 @@ export const TIP_OF_THE_DAY: Tip = {
     id: 'tip-of-the-day',
     title: 'Tipp des Tages',
     text: 'Trinke morgens direkt nach dem Aufstehen ein großes Glas Wasser. Das bringt deinen Kreislauf in Schwung und hilft dir, wach zu werden.',
+    category: 'Gesundheit',
 };
 
 type LibraryContextValue = {

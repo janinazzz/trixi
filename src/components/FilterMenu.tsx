@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SortOption } from '../data/suggestions';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 
 const OPTIONS: { key: SortOption; label: string }[] = [
     { key: 'neuste', label: 'Neuste' },
@@ -41,7 +43,7 @@ export default function FilterMenu({
                                 >
                                     {option.label}
                                 </Text>
-                                {selected && <Ionicons name="checkmark" size={20} color="#ffffff" />}
+                                {selected && <Ionicons name="checkmark" size={20} color={Colors.onAccent} />}
                             </Pressable>
                         );
                     })}
@@ -60,11 +62,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     sheet: {
+        ...Shadows.card,
         width: '80%',
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         padding: 20,
         gap: 12,
     },
@@ -79,19 +82,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         height: 44,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
         paddingHorizontal: 18,
     },
     optionSelected: {
-        backgroundColor: '#000000',
-        borderColor: '#000000',
+        backgroundColor: Colors.accent,
+        borderColor: Colors.accent,
     },
     optionText: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
     },
     optionTextSelected: {
-        color: '#ffffff',
+        color: Colors.onAccent,
     },
 });

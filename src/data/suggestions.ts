@@ -143,9 +143,18 @@ export function getTipCategory(id?: string): string | undefined {
   if (!id) {
     return undefined;
   }
-  return Object.keys(CATEGORY_SUGGESTIONS).find((name) =>
+  const found = Object.keys(CATEGORY_SUGGESTIONS).find((name) =>
     CATEGORY_SUGGESTIONS[name].some((tip) => tip.id === id)
   );
+  if (found) {
+    return found;
+  }
+  // Tipps außerhalb der Such-Vorschläge (z. B. der Tipp des Tages) tragen ihre
+  // Kategorie selbst.
+  if (id === TIP_OF_THE_DAY.id) {
+    return TIP_OF_THE_DAY.category;
+  }
+  return undefined;
 }
 
 // Sort/filter options offered by the filter button on the Bibliothek and

@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useName } from '../context/NameContext';
 import { useProfile } from '../context/ProfileContext';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 import { NavBar } from './home';
 
 const Header = () => {
@@ -15,11 +17,11 @@ const Header = () => {
                 {avatarUri ? (
                     <Image source={{ uri: avatarUri }} style={styles.avatar} />
                 ) : (
-                    <Ionicons name="person-circle-outline" size={70} color = "black" />
+                    <Ionicons name="person-circle-outline" size={70} color={Colors.text} />
                 )}
                 <Text style={styles.nameText}>{name || 'Name'}</Text>
                 <TouchableOpacity style={{flex:1, alignItems: 'flex-end'}} onPress={() => router.push('/profileSettings')}>
-                    <Ionicons name="close-outline" size={30} color="black" />
+                    <Ionicons name="close-outline" size={30} color={Colors.text} />
                 </TouchableOpacity>
             </View>
     );
@@ -63,7 +65,7 @@ export default function Profile() {
                     <Text style={{fontSize: 20, padding: 10}}>
                         Abmelden
                     </Text>
-                    <Ionicons name="log-out-outline" size={30} color="black" />
+                    <Ionicons name="log-out-outline" size={30} color={Colors.text} />
                 </TouchableOpacity>
 
             <Modal
@@ -79,9 +81,12 @@ export default function Profile() {
                             <TouchableOpacity style={styles.dialogButton} onPress={() => setConfirmVisible(false)}>
                                 <Text style={styles.dialogButtonText}>Abbrechen</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[styles.dialogButton, styles.dialogButtonPrimary]} onPress={logout}>
+                            <Pressable
+                                style={({ pressed }) => [styles.dialogButton, styles.dialogButtonPrimary, pressed && { backgroundColor: Colors.accentStrong, borderColor: Colors.accentStrong }]}
+                                onPress={logout}
+                            >
                                 <Text style={[styles.dialogButtonText, styles.dialogButtonTextPrimary]}>Abmelden</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </Pressable>
                 </Pressable>
@@ -94,7 +99,7 @@ export default function Profile() {
 
 const styles = StyleSheet.create({ 
     nameText: {
-        color : '#000000',
+        color : Colors.text,
         fontWeight : 'bold',
         fontSize: 30,
     },
@@ -102,7 +107,7 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         borderRadius: 35,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Colors.surface,
     },
     info: {
         flexDirection: 'column',
@@ -115,6 +120,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     buttonContainer: {
+        ...Shadows.soft,
+        backgroundColor: Colors.white,
         marginTop: 30,
         paddingHorizontal: 5,
         alignSelf: 'center',
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         flexDirection: 'row',
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
     },
     backdrop: {
@@ -132,11 +139,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     dialog: {
+        ...Shadows.card,
         width: '80%',
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         padding: 25,
         gap: 25,
     },
@@ -155,19 +163,19 @@ const styles = StyleSheet.create({
         height: 44,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         alignItems: 'center',
         justifyContent: 'center',
     },
     dialogButtonPrimary: {
-        backgroundColor: '#000000',
-        borderColor: '#000000',
+        backgroundColor: Colors.accent,
+        borderColor: Colors.accent,
     },
     dialogButtonText: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
     },
     dialogButtonTextPrimary: {
-        color: '#ffffff',
+        color: Colors.onAccent,
     },
 });

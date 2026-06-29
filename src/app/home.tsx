@@ -2,10 +2,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Mascot from '../components/Mascot';
 import OnboardingModal from '../components/OnboardingModal';
 import { TIP_OF_THE_DAY, useLibrary } from '../context/LibraryContext';
 import { useName } from '../context/NameContext';
 import { useProfile } from '../context/ProfileContext';
+import { getTipCategory } from '../data/suggestions';
+import { getCategoryColor } from '../theme/categories';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 
 // space the floating NavBar reserves at the bottom (45 offset + 50 height)
 export const NAV_BAR_SPACE = 110;
@@ -14,7 +19,7 @@ const Greeting = () => {
      const { name } = useName();
     return (
         <Text style={styles.greeting}>
-            hey { name }!
+            hey{'\n'}{ name }!
             </Text>
     );
 };
@@ -33,14 +38,14 @@ export const NavBar = () => {
     return (
         <View style={styles.navBar}>
          <Pressable onPress={() => go('/search')}>
-            <Ionicons name={pathname === '/search' ? 'search' : 'search-outline'} size={38} color="black" />
+            <Ionicons name={pathname === '/search' ? 'search' : 'search-outline'} size={38} color={pathname === '/search' ? Colors.accent : Colors.text} />
         </Pressable>
         <Pressable onPress={() => go('/home')}>
-            <Ionicons name={pathname === '/home' ? 'home' : 'home-outline'} size={38} color="black" />
+            <Ionicons name={pathname === '/home' ? 'home' : 'home-outline'} size={38} color={pathname === '/home' ? Colors.accent : Colors.text} />
         </Pressable>
 
         <Pressable onPress={() => go('/bibliothek')}>
-            <Ionicons name={pathname === '/bibliothek' ? 'heart' : 'heart-outline'} size={38} color="black" />
+            <Ionicons name={pathname === '/bibliothek' ? 'heart' : 'heart-outline'} size={38} color={pathname === '/bibliothek' ? Colors.accent : Colors.text} />
         </Pressable>
 
         </View>
@@ -51,17 +56,23 @@ export const NavBar = () => {
 const TipOfTheDay =() => {
     const { isSaved, toggleTip } = useLibrary();
     const liked = isSaved(TIP_OF_THE_DAY.id);
+    // Tipp des Tages in der Farbe seiner Kategorie (wie auf dem Such-Screen).
+    const c = getCategoryColor(getTipCategory(TIP_OF_THE_DAY.id));
     return (
-        <View style={styles.tip}>
-            <Text style={{fontSize: 15, fontWeight: 'regular', padding: 15}}>
-                Tipp des Tages:
-            </Text>
-            <Text style={styles.tipText}>
-                {TIP_OF_THE_DAY.text}
-            </Text>
-            <Pressable style={{alignSelf: 'flex-end', position: 'absolute', bottom: 15, marginRight: 15}} onPress={() => toggleTip(TIP_OF_THE_DAY)}>
-            <Ionicons name={liked ? "heart" : "heart-outline"} size={35} color='black' />
-            </Pressable>
+        <View style={styles.tipWrapper}>
+            {/* Maskottchen lugt oben rechts über den Rand der Karte */}
+            <Mascot size={120} style={styles.tipMascot} />
+            <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
+                <Text style={{fontSize: 15, fontWeight: 'regular', padding: 15, color: c.fg}}>
+                    Tipp des Tages:
+                </Text>
+                <Text style={[styles.tipText, { color: c.fg }]}>
+                    {TIP_OF_THE_DAY.text}
+                </Text>
+                <Pressable style={{alignSelf: 'flex-end', position: 'absolute', bottom: 15, marginRight: 15}} onPress={() => toggleTip(TIP_OF_THE_DAY)}>
+                <Ionicons name={liked ? "heart" : "heart-outline"} size={35} color={c.fg} />
+                </Pressable>
+            </View>
         </View>
 
     );
@@ -81,10 +92,10 @@ export default function Home() {
                 {avatarUri ? (
                     <Image source={{ uri: avatarUri }} style={styles.profilePic} />
                 ) : (
-                    <Ionicons name="person-circle-outline" size={80} color="black" />
+                    <Ionicons name="person-circle-outline" size={80} color={Colors.text} />
                 )}
                 <View style={styles.editBadge}>
-                    <Ionicons name="pencil-outline" size={18} color="black" />
+                    <Ionicons name="pencil-outline" size={18} color={Colors.text} />
                 </View>
             </TouchableOpacity>
             <Greeting />
@@ -102,22 +113,27 @@ const styles = StyleSheet.create({
     greeting: {
         fontSize:45,
         fontWeight: 'bold',
-        paddingHorizontal: 30,
-        marginTop: 50,
+        color: Colors.text,
+        paddingLeft: 30,
+        // rechts Platz freihalten, damit ein langer Name umbricht und das
+        // Maskottchen nicht verdeckt
+        paddingRight: 150,
+        marginTop: 8,
     },
     navBar: {
-        position: 'absolute', 
+        ...Shadows.card,
+        position: 'absolute',
         bottom: 45,
         height: 50,
         borderRadius: 20,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderWidth: 1,
         width: '90%',
         alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
     },
     profileButton: {
         alignSelf: 'flex-end',
@@ -129,7 +145,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Colors.surface,
     },
     editBadge: {
         position: 'absolute',
@@ -138,23 +154,36 @@ const styles = StyleSheet.create({
         width: 26,
         height: 26,
         borderRadius: 8,
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    tip: {
+    tipWrapper: {
         height: '55%',
         width: '90%',
-        borderRadius: 20,
-        borderColor: '#868383',
-        borderWidth: 1,
         alignSelf: 'center',
-        marginTop: 20,
+        marginTop: 10,
+    },
+    tipMascot: {
+        position: 'absolute',
+        right: 15,
+        // negativer top-Wert: das Maskottchen ragt über die Kartenoberkante,
+        // sein unterer Rand wird vom weißen Kartenhintergrund verdeckt
+        top: -100,
+    },
+    tip: {
+        ...Shadows.card,
+        flex: 1,
+        borderRadius: 20,
+        borderColor: Colors.borderSoft,
+        borderWidth: 1,
+        // deckt den überlappenden unteren Rand des Maskottchens ab
+        backgroundColor: Colors.white,
     },
     tipText: {
-        fontSize: 18,
+        fontSize: 22,
         paddingHorizontal: 15,
     }
 

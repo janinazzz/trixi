@@ -13,6 +13,8 @@ import {
     View,
 } from 'react-native';
 import { GENDERS, useProfile } from '../context/ProfileContext';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 
 const ChipList = ({
     items,
@@ -40,14 +42,14 @@ const ChipList = ({
                 <View key={`${label}-${index}`} style={styles.chip}>
                     <Text style={styles.chipText}>{label}</Text>
                     <TouchableOpacity onPress={() => onRemove(index)} hitSlop={8}>
-                        <Ionicons name="close" size={16} color="#868383" />
+                        <Ionicons name="close" size={16} color={Colors.textMuted} />
                     </TouchableOpacity>
                 </View>
             ))}
             <TextInput
                 style={[styles.chip, styles.addChip]}
                 placeholder={placeholder}
-                placeholderTextColor="#868383"
+                placeholderTextColor={Colors.textMuted}
                 value={draft}
                 onChangeText={setDraft}
                 onSubmitEditing={submit}
@@ -90,7 +92,7 @@ export default function OnboardingModal({
                     <View style={styles.header}>
                         <Text style={styles.title}>Erzähl uns von dir</Text>
                         <Pressable onPress={onClose} hitSlop={10}>
-                            <Ionicons name="close" size={28} color="black" />
+                            <Ionicons name="close" size={28} color={Colors.text} />
                         </Pressable>
                     </View>
 
@@ -105,7 +107,7 @@ export default function OnboardingModal({
                             <TextInput
                                 style={[styles.pill, styles.pillInput]}
                                 placeholder="TT/MM/JJ"
-                                placeholderTextColor="#868383"
+                                placeholderTextColor={Colors.textMuted}
                                 value={birthday}
                                 onChangeText={setBirthday}
                             />
@@ -139,14 +141,14 @@ export default function OnboardingModal({
                                 <TextInput
                                     style={[styles.pill, styles.pillInput, { width: 90 }]}
                                     placeholder="PLZ"
-                                    placeholderTextColor="#868383"
+                                    placeholderTextColor={Colors.textMuted}
                                     value={plz}
                                     onChangeText={setPlz}
                                 />
                                 <TextInput
                                     style={[styles.pill, styles.pillInput, { flex: 1 }]}
                                     placeholder="Stadt"
-                                    placeholderTextColor="#868383"
+                                    placeholderTextColor={Colors.textMuted}
                                     value={stadt}
                                     onChangeText={setStadt}
                                 />
@@ -178,9 +180,12 @@ export default function OnboardingModal({
                         </View>
                     </ScrollView>
 
-                    <TouchableOpacity style={styles.doneButton} onPress={onClose}>
+                    <Pressable
+                        style={({ pressed }) => [styles.doneButton, pressed && { backgroundColor: Colors.accentStrong }]}
+                        onPress={onClose}
+                    >
                         <Text style={styles.doneText}>Eingaben übernehmen</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </KeyboardAvoidingView>
         </Modal>
@@ -196,12 +201,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     dialog: {
+        ...Shadows.card,
         width: '100%',
         maxHeight: '85%',
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         padding: 25,
         gap: 15,
     },
@@ -216,7 +222,7 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 15,
-        color: '#868383',
+        color: Colors.textMuted,
     },
     field: {
         gap: 10,
@@ -227,7 +233,7 @@ const styles = StyleSheet.create({
     },
     pill: {
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
         paddingHorizontal: 15,
     },
@@ -251,20 +257,20 @@ const styles = StyleSheet.create({
         height: 36,
         borderRadius: 18,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         alignItems: 'center',
         justifyContent: 'center',
     },
     genderCircleSelected: {
-        backgroundColor: '#000000',
-        borderColor: '#000000',
+        backgroundColor: Colors.accent,
+        borderColor: Colors.accent,
     },
     genderText: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
     },
     genderTextSelected: {
-        color: '#ffffff',
+        color: Colors.onAccent,
     },
     chipRow: {
         flexDirection: 'row',
@@ -276,7 +282,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
         height: 36,
         minWidth: 100,
@@ -288,20 +294,20 @@ const styles = StyleSheet.create({
     },
     addChip: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
         paddingVertical: 0,
         justifyContent: 'flex-start',
     },
     doneButton: {
         height: 44,
         borderRadius: 20,
-        backgroundColor: '#000000',
+        backgroundColor: Colors.accent,
         alignItems: 'center',
         justifyContent: 'center',
     },
     doneText: {
         fontSize: 16,
-        color: '#ffffff',
+        color: Colors.onAccent,
         fontWeight: '500',
     },
 });

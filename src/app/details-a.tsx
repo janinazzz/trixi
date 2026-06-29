@@ -5,6 +5,9 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useLibrary } from '../context/LibraryContext';
 import { getTipById, getTipCategory } from '../data/suggestions';
+import { getCategoryColor } from '../theme/categories';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 import { NavBar } from './home';
 
 export default function DetailsScreen() {
@@ -16,41 +19,43 @@ export default function DetailsScreen() {
   const tip = getTipById(id);
   const category = getTipCategory(id);
   const liked = tip ? isSaved(tip.id) : false;
+  // Detail-Karte in der Farbe der Kategorie (Hintergrund des Screens bleibt weiß).
+  const c = getCategoryColor(category);
 
   return (
     <View style={styles.screen}>
-      <View style={styles.tip}>
+      <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
         {/* Kopfzeile: "Tipp:" links, Schließen-X rechts */}
         <View style={styles.topRow}>
-          <Text style={styles.tipLabel}>Tipp:</Text>
+          <Text style={[styles.tipLabel, { color: c.fg }]}>Tipp:</Text>
           <Pressable onPress={() => router.back()} hitSlop={10}>
-            <Ionicons name="close" size={28} color="black" />
+            <Ionicons name="close" size={28} color={c.fg} />
           </Pressable>
         </View>
 
         {tip ? (
           <ScrollView contentContainerStyle={styles.body}>
-            <Text style={styles.title}>{tip.title}</Text>
-            <Text style={styles.tipText}>{tip.text}</Text>
+            <Text style={[styles.title, { color: c.fg }]}>{tip.title}</Text>
+            <Text style={[styles.tipText, { color: c.fg }]}>{tip.text}</Text>
           </ScrollView>
         ) : (
           <View style={styles.body}>
-            <Text style={styles.tipText}>Dieser Tipp wurde nicht gefunden.</Text>
+            <Text style={[styles.tipText, { color: c.fg }]}>Dieser Tipp wurde nicht gefunden.</Text>
           </View>
         )}
 
         {/* Fußzeile: Kategorie-Pille links, Herz rechts */}
         <View style={styles.bottomRow}>
           {category ? (
-            <View style={styles.categoryPill}>
-              <Text style={styles.categoryText}>{category}</Text>
+            <View style={[styles.categoryPill, { borderColor: c.fg }]}>
+              <Text style={[styles.categoryText, { color: c.fg }]}>{category}</Text>
             </View>
           ) : (
             <View />
           )}
           {tip && (
             <Pressable onPress={() => toggleTip(tip)} hitSlop={10}>
-              <Ionicons name={liked ? 'heart' : 'heart-outline'} size={35} color="black" />
+              <Ionicons name={liked ? 'heart' : 'heart-outline'} size={35} color={c.fg} />
             </Pressable>
           )}
         </View>
@@ -67,10 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tip: {
+    ...Shadows.card,
+    backgroundColor: Colors.white,
     height: '70%',
     width: '90%',
     borderRadius: 20,
-    borderColor: '#868383',
+    borderColor: Colors.borderSoft,
     borderWidth: 1,
     alignSelf: 'center',
     paddingVertical: 15,
@@ -92,12 +99,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 14,
-    color: '#1a1a1a',
+    color: Colors.text,
   },
   tipText: {
     fontSize: 18,
     lineHeight: 26,
-    color: '#1a1a1a',
+    color: Colors.text,
   },
   bottomRow: {
     flexDirection: 'row',
@@ -108,13 +115,13 @@ const styles = StyleSheet.create({
   },
   categoryPill: {
     borderWidth: 1,
-    borderColor: '#868383',
+    borderColor: Colors.borderSoft,
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 14,
   },
   categoryText: {
     fontSize: 14,
-    color: '#868383',
+    color: Colors.textMuted,
   },
 });

@@ -12,6 +12,9 @@ import { Ionicons } from '@expo/vector-icons';
 import FilterMenu from '../components/FilterMenu';
 import { useLibrary } from '../context/LibraryContext';
 import { getTipCategory, SortOption, sortTips } from '../data/suggestions';
+import { getCategoryColor } from '../theme/categories';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 export default function Bibliothek() {
@@ -26,7 +29,7 @@ export default function Bibliothek() {
 {/* HEADER */}
  
 <View style ={styles.headerRow}>
-  <Ionicons name = "heart-outline" size ={30} color = "black"/>
+  <Ionicons name = "heart-outline" size ={30} color = {Colors.text}/>
  
   <Text style = {styles.header}>
     Bibliothek
@@ -39,7 +42,7 @@ export default function Bibliothek() {
     <Text>
       Filter
     </Text>
-    <Ionicons name = "options-outline" size ={20} color = "black"/>
+    <Ionicons name = "options-outline" size ={20} color = {Colors.text}/>
     </View>
   </TouchableOpacity>
   
@@ -53,21 +56,22 @@ export default function Bibliothek() {
 ) : (
   tips.map((tip) => {
     const category = getTipCategory(tip.id);
+    const c = getCategoryColor(category);
     return (
-    <View key={tip.id} style={styles.tipp}>
-      <Text style={styles.cardTitel}>
+    <View key={tip.id} style={[styles.tipp, { backgroundColor: c.bg, borderColor: c.bg }]}>
+      <Text style={[styles.cardTitel, { color: c.fg }]}>
         {tip.title}
       </Text>
-      <Text style={styles.cardText}>
+      <Text style={[styles.cardText, { color: c.fg }]}>
         {tip.text}
       </Text>
       {category && (
-        <View style={styles.categoryPill}>
-          <Text style={styles.categoryText}>{category}</Text>
+        <View style={[styles.categoryPill, { borderColor: c.fg }]}>
+          <Text style={[styles.categoryText, { color: c.fg }]}>{category}</Text>
         </View>
       )}
       <Pressable style={styles.heart} onPress={() => toggleTip(tip)}>
-        <Ionicons name="heart" size={30} color="black" />
+        <Ionicons name="heart" size={30} color={c.fg} />
       </Pressable>
     </View>
     );
@@ -117,25 +121,27 @@ const styles = StyleSheet.create({
   marginHorizontal: 20,
   marginBottom: 10,
   gap: 7,
-  color: 'black',
+  color: Colors.text,
   fontSize: 15,
   },
  
  
   header: {
-    color : 'black',
+    color : Colors.accent,
     fontWeight : 'bold',
     fontSize: 30,
   },
  
  
     tipp: {
+    ...Shadows.card,
+    backgroundColor: Colors.white,
     width: '90%',
     height: 300,
- 
+
     borderWidth: 1,
-    borderColor: '#868383',
- 
+    borderColor: Colors.borderSoft,
+
     borderRadius: 20,
     alignSelf: 'center',
     marginBottom: 20,
@@ -144,21 +150,21 @@ const styles = StyleSheet.create({
  
   cardTitel: {
     fontSize: 15,
-    color: 'black',
+    color: Colors.text,
     padding: 15,
     justifyContent: 'flex-start',
   },
 
   cardText: {
     fontSize: 18,
-    color: 'black',
+    color: Colors.text,
     paddingHorizontal: 15,
     paddingBottom: 15,
   },
 
   empty: {
     fontSize: 16,
-    color: '#868383',
+    color: Colors.textMuted,
     textAlign: 'center',
     marginHorizontal: 30,
     marginTop: 40,
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
     bottom: 15,
     left: 15,
     borderWidth: 1,
-    borderColor: '#868383',
+    borderColor: Colors.borderSoft,
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 14,
@@ -183,7 +189,7 @@ const styles = StyleSheet.create({
 
   categoryText: {
     fontSize: 14,
-    color: '#868383',
+    color: Colors.textMuted,
   }
 
 });

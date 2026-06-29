@@ -11,6 +11,9 @@ import {
 
 import FilterMenu from '../components/FilterMenu';
 import { getSuggestions, SortOption, sortTips } from '../data/suggestions';
+import { CATEGORY_COLORS } from '../theme/categories';
+import { Colors } from '../theme/colors';
+import { Shadows } from '../theme/shadows';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 export default function searchResult() {
@@ -22,10 +25,15 @@ export default function searchResult() {
   const [sort, setSort] = useState<SortOption>('neuste');
   const suggestions = sortTips(getSuggestions(keyword), sort);
 
+  // Bei einem Kategorie-Stichwort den Screen-Hintergrund in der Kategorie-Farbe
+  // einfärben; Kopf-Texte nehmen den passenden Kontrastton.
+  const categoryColor = keyword ? CATEGORY_COLORS[keyword] : undefined;
+  const headFg = categoryColor ? categoryColor.fg : undefined;
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={[{ flex: 1 }, categoryColor && { backgroundColor: categoryColor.bg }]}>
       <View style={styles.resultHeader}>
-        <Text style={styles.resultText}> Ergebnisse für "{heading}"</Text>
+        <Text style={[styles.resultText, headFg && { color: headFg }]}> Ergebnisse für "{heading}"</Text>
       </View>
 
       <View style={styles.actionRow}>
@@ -33,8 +41,8 @@ export default function searchResult() {
           style={{ flexDirection: 'row', gap: 7 }}
           onPress={() => setFilterVisible(true)}
         >
-          <Text style={styles.actionText}>Filter</Text>
-          <Ionicons name="options-outline" size={20} color="#000000" />
+          <Text style={[styles.actionText, headFg && { color: headFg }]}>Filter</Text>
+          <Ionicons name="options-outline" size={20} color={headFg ?? Colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   resultText: {
-    color: 'black',
+    color: Colors.accent,
     fontWeight: 'bold',
     fontSize: 30,
   },
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 15,
-    color: '#000000',
+    color: Colors.text,
   },
   grid: {
     flexDirection: 'row',
@@ -104,10 +112,12 @@ const styles = StyleSheet.create({
     paddingBottom: NAV_BAR_SPACE,
   },
   card: {
+    ...Shadows.card,
+    backgroundColor: Colors.white,
     width: '48%',
     aspectRatio: 1,
     borderWidth: 1,
-    borderColor: '#868383',
+    borderColor: Colors.borderSoft,
     borderRadius: 20,
     padding: 15,
     marginBottom: 16,
@@ -115,16 +125,16 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'black',
+    color: Colors.text,
   },
   cardPreview: {
     fontSize: 13,
-    color: '#444444',
+    color: Colors.textMuted,
     marginTop: 8,
   },
   emptyText: {
     fontSize: 16,
-    color: '#868383',
+    color: Colors.textMuted,
     textAlign: 'center',
     marginHorizontal: 20,
     marginTop: 40,

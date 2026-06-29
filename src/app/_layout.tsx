@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { LibraryProvider } from '../context/LibraryContext';
 import { NameProvider } from '../context/NameContext';
 import { ProfileProvider } from '../context/ProfileContext';
+import { Colors } from '../theme/colors';
 
 export default function Layout() {
     return (
@@ -12,7 +13,7 @@ export default function Layout() {
                         screenOptions={{
                             headerShown: false,
                             contentStyle: {
-                                backgroundColor: '#ffffff',
+                                backgroundColor: Colors.white,
                             },
                         }}
                     />

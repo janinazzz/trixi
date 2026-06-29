@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useName } from '../context/NameContext';
 import { GENDERS, useProfile } from '../context/ProfileContext';
+import { Colors } from '../theme/colors';
 import { NAV_BAR_SPACE, NavBar } from './home';
 
 const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: string) => void }) => {
@@ -29,21 +30,21 @@ const Header = ({ name, onChangeName }: { name: string; onChangeName: (value: st
                 {avatarUri ? (
                     <Image source={{ uri: avatarUri }} style={styles.avatar} />
                 ) : (
-                    <Ionicons name="person-circle-outline" size={70} color="black" />
+                    <Ionicons name="person-circle-outline" size={70} color={Colors.text} />
                 )}
                 <View style={styles.avatarBadge}>
-                    <Ionicons name="camera-outline" size={14} color="black" />
+                    <Ionicons name="camera-outline" size={14} color={Colors.text} />
                 </View>
             </TouchableOpacity>
             <TextInput
                 style={[styles.nameText, { flex: 1 }]}
                 placeholder="</name>"
-                placeholderTextColor="#868383"
+                placeholderTextColor={Colors.textMuted}
                 value={name}
                 onChangeText={onChangeName}
             />
             <TouchableOpacity onPress={() => router.push('/profile')}>
-                <Ionicons name="settings-outline" size={30} color="black" />
+                <Ionicons name="settings-outline" size={30} color={Colors.text} />
             </TouchableOpacity>
         </View>
     );
@@ -75,14 +76,14 @@ const ChipList = ({
                 <View key={`${label}-${index}`} style={styles.chip}>
                     <Text style={styles.chipText}>{label}</Text>
                     <TouchableOpacity onPress={() => onRemove(index)} hitSlop={8}>
-                        <Ionicons name="close" size={16} color="#868383" />
+                        <Ionicons name="close" size={16} color={Colors.textMuted} />
                     </TouchableOpacity>
                 </View>
             ))}
             <TextInput
                 style={[styles.chip, styles.addChip]}
                 placeholder={placeholder}
-                placeholderTextColor="#868383"
+                placeholderTextColor={Colors.textMuted}
                 value={draft}
                 onChangeText={setDraft}
                 onSubmitEditing={submit}
@@ -128,7 +129,7 @@ export default function ProfileSettings() {
                         <TextInput
                             style={[styles.pill, styles.pillInput]}
                             placeholder="TT/MM/JJ"
-                            placeholderTextColor="#868383"
+                            placeholderTextColor={Colors.textMuted}
                             value={birthday}
                             onChangeText={setBirthday}
                         />
@@ -163,14 +164,14 @@ export default function ProfileSettings() {
                         <TextInput
                             style={[styles.pill, styles.pillInput, { width: 90 }]}
                             placeholder="PLZ"
-                            placeholderTextColor="#868383"
+                            placeholderTextColor={Colors.textMuted}
                             value={plz}
                             onChangeText={setPlz}
                         />
                         <TextInput
                             style={[styles.pill, styles.pillInput, { flex: 1 }]}
                             placeholder="Stadt"
-                            placeholderTextColor="#868383"
+                            placeholderTextColor={Colors.textMuted}
                             value={stadt}
                             onChangeText={setStadt}
                         />
@@ -217,7 +218,7 @@ export default function ProfileSettings() {
 
 const styles = StyleSheet.create({
     nameText: {
-        color: '#000000',
+        color: Colors.text,
         fontWeight: 'bold',
         fontSize: 30,
     },
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         borderRadius: 35,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Colors.surface,
     },
     avatarBadge: {
         position: 'absolute',
@@ -234,9 +235,9 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         borderRadius: 8,
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -255,12 +256,12 @@ const styles = StyleSheet.create({
     },
     divider: {
         borderBottomWidth: 1,
-        borderBottomColor: '#868383',
+        borderBottomColor: Colors.borderSoft,
         marginHorizontal: 30,
     },
     pill: {
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
         paddingHorizontal: 15,
     },
@@ -274,20 +275,20 @@ const styles = StyleSheet.create({
         height: 36,
         borderRadius: 18,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         alignItems: 'center',
         justifyContent: 'center',
     },
     genderCircleSelected: {
-        backgroundColor: '#000000',
-        borderColor: '#000000',
+        backgroundColor: Colors.accent,
+        borderColor: Colors.accent,
     },
     genderText: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
     },
     genderTextSelected: {
-        color: '#ffffff',
+        color: Colors.onAccent,
     },
     chipRow: {
         flexDirection: 'row',
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8,
         borderWidth: 1,
-        borderColor: '#868383',
+        borderColor: Colors.borderSoft,
         borderRadius: 20,
         height: 36,
         minWidth: 110,
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     },
     addChip: {
         fontSize: 16,
-        color: '#000000',
+        color: Colors.text,
         paddingVertical: 0,
         justifyContent: 'flex-start',
     },
