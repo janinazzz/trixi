@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   card: {
     ...Shadows.card,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.background,
     width: '48%',
     aspectRatio: 1,
     borderWidth: 1,

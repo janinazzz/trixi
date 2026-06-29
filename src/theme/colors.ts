@@ -20,16 +20,21 @@ export const Colors = {
   onAccent: "#FFFFFF",
 
   // — Neutrale Basis —
-  background: "#FFFFFF",
+  background: "#f9f7e5",
   /** Weiche, neutrale Fläche für Cards / abgesetzte Bereiche. */
   surface: "#F4F4F8",
   text: "#1E1E28",
   /** Sekundärtext, Platzhalter, Icons. */
   textMuted: "#8E8F99",
   /** Kräftigere Hairline-Border für klare Abgrenzungen. */
-  border: "#C5C6CE",
+  border: "#C9BE9A",
   /** Dezente Border, passend zum hellen Look. */
-  borderSoft: "#EAEAF1",
+  borderSoft: "#C9BE9A",
+
+  /** Hintergrund der schwebenden Navigationsleiste. */
+  navBar: "#F0EAD6",
+  /** Etwas dunklerer Rahmen der Navigationsleiste. */
+  navBarBorder: "#C9BE9A",
 
   white: "#FFFFFF",
   black: "#000000",
