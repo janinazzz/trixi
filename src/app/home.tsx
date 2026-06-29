@@ -61,7 +61,7 @@ const TipOfTheDay =() => {
     return (
         <View style={styles.tipWrapper}>
             {/* Maskottchen lugt oben rechts über den Rand der Karte */}
-            <Mascot size={120} style={styles.tipMascot} />
+            <Mascot size={100} style={styles.tipMascot} />
             <View style={[styles.tip, { backgroundColor: c.bg, borderColor: c.bg }]}>
                 <Text style={{fontSize: 15, fontWeight: 'regular', padding: 15, color: c.fg}}>
                     Tipp des Tages:
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         right: 15,
         // negativer top-Wert: das Maskottchen ragt über die Kartenoberkante,
         // sein unterer Rand wird vom weißen Kartenhintergrund verdeckt
-        top: -100,
+        top: -83,
     },
     tip: {
         ...Shadows.card,

@@ -4,11 +4,11 @@
     "slug": "Trixi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/mascot-icon.png",
     "scheme": "trixi",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/mascot-icon.png"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,10 +28,12 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/mascot-splash.png",
+          "imageWidth": 200,
           "android": {
-            "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "image": "./assets/images/mascot-splash.png",
+            "imageWidth": 200
           }
         }
       ]
